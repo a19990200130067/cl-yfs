@@ -6,6 +6,8 @@
 
 (in-package :cl-yfs-lock-server)
 
+(setf s-xml-rpc::*xml-rpc-package* *package*)
+
 (defparameter *locks* (make-hash-table))
 (defparameter *hash-mutex* (make-mutex :name "hash table mutex"))
 
