@@ -2,7 +2,9 @@
 
 (defpackage "CL-YFS-CLIENTS"
   (:use :common-lisp :sb-thread :s-xml-rpc)
-  (:export :rpc-client :lock :unlock))
+  (:export :rpc-client 
+	   :lock-client :lock :unlock
+	   :extent-client :get-block :put-block :new-block :free-block))
 
 (in-package :cl-yfs-clients)
 
@@ -17,6 +19,35 @@
 (defclass lock-client (rpc-client) ())
 (defclass extent-client (rpc-client) ())
 
+
+;;; Generic methods
+
+(defgeneric rpc-call (client encoded-rpc)
+  "call the encoded rpc with given client"
+  )
+
+(defgeneric lock (client lock-num)
+  "Lock the given lock-num"
+  )
+
+(defgeneric unlock (client lock-num)
+  "Unlock the given lock-num"
+  )
+
+(defgeneric get-block (client block-num)
+  "get the block content"
+  )
+
+(defgeneric put-block (client block-num content)
+  "put the content to the given block-num, the content should have length <= *block-size*, will overwrite the old contents but not clear the entire block"
+  )
+
+(defgeneric new-block (client))
+
+(defgeneric free-block (client block-num))
+
+
+;;; The implementation of generic methods
 
 (defmethod rpc-call ((rpcc rpc-client) encoded)
   (s-xml-rpc:xml-rpc-call encoded
