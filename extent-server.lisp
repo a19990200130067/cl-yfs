@@ -50,12 +50,13 @@
 	    (mod block-num 8))))
 
 (defun is-block-free (block-num)
-  (multiple-value-bind (block-loc byte-loc bit-loc) (bitmap-location block-num)
-    (file-position *file-stream* (* block-loc *block-size*))
-    (let ((str (make-string *block-size*)) (byte 0))
-      (read-sequence str *file-stream* :end *block-size*)
-      (setf byte (char-code (char str byte-loc)))
-      (if (eql 0 (logand byte (ash 1 bit-loc))) t nil))))
+  (if (eql 0 block-num) nil             ;The 0th block should never be allocated 
+      (multiple-value-bind (block-loc byte-loc bit-loc) (bitmap-location block-num)
+	(file-position *file-stream* (* block-loc *block-size*))
+	(let ((str (make-string *block-size*)) (byte 0))
+	  (read-sequence str *file-stream* :end *block-size*)
+	  (setf byte (char-code (char str byte-loc)))
+	  (if (eql 0 (logand byte (ash 1 bit-loc))) t nil)))))
 
 (defun occupy-block (block-num)
   "Mark the given block as used"
