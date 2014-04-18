@@ -1,7 +1,8 @@
 (require :s-xml-rpc)
+(require :cffi)
 
 (defpackage "CL-YFS-CLIENTS"
-  (:use :common-lisp :sb-thread :s-xml-rpc)
+  (:use :common-lisp :sb-thread :s-xml-rpc :cffi)
   (:export :rpc-client 
 	   :lock-client :lock :unlock
 	   :extent-client :get-block :put-block :new-block :free-block))
