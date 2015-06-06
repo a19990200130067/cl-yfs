@@ -11,7 +11,7 @@
 
 (defclass rpc-client ()
   ((host :accessor host-name
-	 :initform "localhost"
+	 :initform "localhost"	 
 	 :initarg :host)
    (port :accessor port
 	 :initform 8080
